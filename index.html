@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>给翠翠欣的小小星球</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:linear-gradient(145deg,#fff0f5,#f5edff,#eaf8ff);color:#55465b;text-align:center;min-height:100vh}
+main{max-width:680px;margin:auto;padding:24px 18px 50px}
+h1{font-size:30px;color:#d66d9b;margin:24px 0 8px}
+.sub{color:#987e9b}
+.card{background:#ffffffc9;border:1px solid #fff;border-radius:25px;padding:22px;margin:18px 0;box-shadow:0 8px 25px #b98aab20}
+.animal{font-size:100px;cursor:pointer;display:block;transition:.2s}
+.animal:active{transform:scale(.9)}
+button{border:0;border-radius:22px;padding:12px 18px;margin:6px;background:#ed9cbd;color:white;font-size:15px;cursor:pointer}
+button.alt{background:#a995d8}
+button.blue{background:#83b8d7}
+p{line-height:1.9}
+.note{font-size:13px;color:#a58da8}
+#letter{display:none;position:fixed;inset:0;background:#57445c99;align-items:center;justify-content:center;padding:20px}
+#letter .paper{background:#fff9fc;border-radius:25px;padding:25px;max-width:440px;line-height:2}
+.heart{position:fixed;bottom:-30px;animation:up 6s linear infinite;pointer-events:none}
+@keyframes up{to{transform:translateY(-110vh) rotate(30deg);opacity:0}}
+</style>
+</head>
+<body>
+<main>
+<div class="note">✦ 一颗只属于你的温柔小星球 ✦</div>
+<h1>超级笨蛋翠翠欣</h1>
+<p class="sub">欢迎来到你的专属小世界 ☁️</p>
+
+<section class="card">
+<div class="animal" id="animal" onclick="pet()">🐰</div>
+<h2 id="animalName">兔兔守护员</h2>
+<p id="animalText">今天也要记得照顾好自己的心情呀。</p>
+<button onclick="changeAnimal()">换一位小伙伴</button>
+<button class="alt" onclick="pet()">摸摸小动物</button>
+<p class="note">偷偷告诉你：多摸几次会有惊喜。</p>
+</section>
+
+<section class="card">
+<h2>☀️ 今天的心情天气</h2>
+<p>选一朵最像你现在心情的云吧。</p>
+<button onclick="weather('晴天 ☀️','希望今天有很多值得开心的小事。')">晴天</button>
+<button class="alt" onclick="weather('多云 ☁️','不开心也没关系，可以慢慢来。')">多云</button>
+<button class="blue" onclick="weather('下雨 🌧️','如果心里有委屈，我愿意认真听。')">下雨</button>
+<p id="weatherText">今天的天气由你决定。</p>
+</section>
+
+<section class="card">
+<h2>💌 有一封信想给你</h2>
+<p>有些话，不想只用一句对不起带过。</p>
+<button onclick="openLetter()">打开这封信</button>
+</section>
+
+<section class="card">
+<h2>🎁 今日份小惊喜</h2>
+<p id="surprise">这里藏着一些随机的小惊喜。</p>
+<button class="alt" onclick="surprise()">拆开礼物盒</button>
+</section>
+
+<section class="card">
+<h2>🌷 我想慢慢做到的事</h2>
+<p>认真听你说话，不急着反驳。</p>
+<p>尊重你的感受，不把你的在意当成小事。</p>
+<p>做错了就认真改，而不是只说好听的话。</p>
+<p>用实际行动，让你感受到被珍惜。</p>
+</section>
+
+<p class="note">不催你立刻开心，也不要求你马上原谅。<br>希望这个小小星球，能给你带来一点温柔。</p>
+</main>
+
+<div id="letter">
+<div class="paper">
+<h2>写给翠翠欣的一封信 💗</h2>
+<p>我想认真跟你说一声对不起。</p>
+<p>如果我的言行让你觉得委屈、失望，或者让你觉得自己没有被理解，我真的很抱歉。</p>
+<p>我不想用一句“别生气了”就把事情翻过去，也不想只顾着让你快点开心，而忽略你为什么难过。</p>
+<p>你的感受值得被认真对待。以后我会努力多站在你的角度想一想，认真听你说话，不敷衍，也不把道歉只停留在嘴上。</p>
+<p>我知道真正的诚意不是说出来的，而是之后一点一点做出来的。</p>
+<p>你不用为了让我安心而马上原谅我。希望你知道，我在意你，也愿意好好珍惜我们之间的感情。</p>
+<button onclick="closeLetter()">把信收好 💗</button>
+</div>
+</div>
+
+<script>
+const animals=[
+["🐰","兔兔守护员","今天也要记得照顾好自己的心情呀。"],
+["🐱","猫猫观察员","不开心的时候，也可以安静地待一会儿。"],
+["🐻","熊熊抱抱员","愿你每天都有软乎乎的好心情。"],
+["🐼","熊猫治愈师","今天也要给自己一点温柔。"],
+["🦦","水獭快乐官","希望你的小烦恼都慢慢变小。"],
+["🐶","小狗忠诚员","今天也有一位小伙伴在这里给你加油。"]
+];
+let current=0,times=0;
+function changeAnimal(){
+current=(current+1)%animals.length;
+document.getElementById("animal").textContent=animals[current][0];
+document.getElementById("animalName").textContent=animals[current][1];
+document.getElementById("animalText").textContent=animals[current][2];
+}
+function pet(){
+times++;
+document.getElementById("animalText").textContent=
+times>=5?"🎉 隐藏彩蛋：你值得被认真对待，也值得拥有很多快乐！":"摸摸成功！愿你今天多一点开心。";
+}
+function weather(a,b){
+document.getElementById("weatherText").textContent=a+" —— "+b;
+}
+function openLetter(){document.getElementById("letter").style.display="flex"}
+function closeLetter(){document.getElementById("letter").style.display="none"}
+const surprises=["今天也要记得，你有很多值得被喜欢的地方。💗","愿你遇到的烦恼都有出口。🌈","给今天的你一颗小星星：⭐","希望你每天都能吃到喜欢的东西。🍰","愿生活对你温柔一点。🌷"];
+function surprise(){
+document.getElementById("surprise").textContent=surprises[Math.floor(Math.random()*surprises.length)];
+}
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.textContent=["💗","✨","🌸","☁️"][Math.floor(Math.random()*4)];
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(15+Math.random()*15)+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},1100);
+</script>
+</body>
+</html>
